@@ -18,42 +18,52 @@ const noticias = [
 ];
 
 // noticias en el dom
-function mostrarNoticias() {
+function mostrarNoticias(filtro = "") {
     const contenedor = document.getElementById('contenedor-noticias');
+   
+    contenedor.innerHTML = "";
 
     for (let i = 0; i < noticias.length; i++) {
+        if (noticias[i].titulo.toLowerCase().includes(filtro.toLowerCase())) {
         
-        // Contenedor de cada noticia
-        const card = document.createElement('div');
-        card.style.border = "1px solid black";
-        card.style.margin = "10px";
-        card.style.padding = "10px";
-        card.style.width = "300px";
-        card.style.display = "inline-block";
-        card.style.verticalAlign = "top";
+            // Contenedor de cada noticia
+            const card = document.createElement('div');
+            card.classList.add("noticia-card");
+            card.style.border = "1px solid black";
+            card.style.margin = "10px";
+            card.style.padding = "10px";
+            card.style.width = "300px";
+            card.style.display = "inline-block";
+            card.style.verticalAlign = "top";
 
-        // Imagen
-        const img = document.createElement('img');
-        img.src = noticias[i].imagen;
-        img.style.width = "100%";
+            // Imagen
+            const img = document.createElement('img');
+            img.src = noticias[i].imagen;
+            img.style.width = "100%";
 
-        // Título
-        const titulo = document.createElement('h2');
-        titulo.textContent = noticias[i].titulo;
+            // Título
+            const titulo = document.createElement('h2');
+            titulo.textContent = noticias[i].titulo;
 
-        // Descripción
-        const desc = document.createElement('p');
-        desc.textContent = noticias[i].descripcion;
+            // Descripción
+            const desc = document.createElement('p');
+            desc.textContent = noticias[i].descripcion;
 
-        // Agregar todo al card
-        card.appendChild(img);
-        card.appendChild(titulo);
-        card.appendChild(desc);
+            // Agregar todo al card
+            card.appendChild(img);
+            card.appendChild(titulo);
+            card.appendChild(desc);
 
-        // Agregar card al contenedor
-        contenedor.appendChild(card);
+            // Agregar card al contenedor
+            contenedor.appendChild(card);
+        }
     }
+
 }
+
+document.getElementById('buscador').addEventListener('input', function(event) {
+    mostrarNoticias(event.target.value);
+});
 
 // Ejecutar al cargar
 window.addEventListener('load', function() {

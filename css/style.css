@@ -1,0 +1,41 @@
+.header-principal {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f4f4f4;
+    border-bottom: 2px solid black;
+}
+
+.logo {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.contenedor-buscador input {
+    padding: 0.5rem;
+    width: 250px;
+    border: 1px solid black;
+}
+
+.menu a {
+    text-decoration: none;
+    color: black;
+    margin-left: 1rem;
+    font-weight: bold;
+}
+
+#contenedor-noticias {
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    padding: 2rem;
+}
+
+.noticia-card {
+    border: 1px solid black;
+    padding: 1rem;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
