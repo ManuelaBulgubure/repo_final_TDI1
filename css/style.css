@@ -3,13 +3,15 @@
     justify-content: space-between; 
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #f4f4f4;
+    background-color: white;
     border-bottom: 2px solid black;
+    position: relative;
 }
 
-.logo {
-    margin: 0;
-    font-size: 1.5rem;
+#imagen_logo{
+   margin-right: auto;       
+    width: 100px;       
+    height: auto;
 }
 
 .contenedor-buscador input {
