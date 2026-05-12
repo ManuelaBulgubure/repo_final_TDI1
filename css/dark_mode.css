@@ -1,0 +1,49 @@
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body.modo-oscuro {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.modo-oscuro .header-principal {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #555555;
+}
+
+body.modo-oscuro .contenedor-buscador input {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #555555;
+}
+
+body.modo-oscuro .menu a {
+    color: #ffffff;
+}
+
+body.modo-oscuro .noticia-card {
+    background-color: #2d2d2d;
+    border-color: #555555;
+    color: #ffffff;
+}
+
+.tema-boton {
+    padding: 8px 16px;
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    color: #000000;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body.modo-oscuro .tema-boton {
+    background-color: #333333;
+    color: #ffffff;
+    border-color: #555555;
+}

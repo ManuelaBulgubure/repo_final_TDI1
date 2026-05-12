@@ -1,108 +1,56 @@
-// Definir colores para modos
-const colores = {
-    claro: {
-        body: { backgroundColor: '#ffffff', color: '#000000' },
-        header: { backgroundColor: '#f4f4f4', color: '#000000', borderColor: '#000000' },
-        buscador: { backgroundColor: '#ffffff', color: '#000000', borderColor: '#000000' },
-        menuLinks: '#000000',
-        boton: { textContent: 'Modo Oscuro', backgroundColor: '#f0f0f0', color: '#000', borderColor: '#ccc' },
-        tarjetas: { backgroundColor: '#ffffff', borderColor: '#000000', color: '#000000' }
-    },
-    oscuro: {
-        body: { backgroundColor: '#1a1a1a', color: '#ffffff' },
-        header: { backgroundColor: '#000000', color: '#ffffff', borderColor: '#555' },
-        buscador: { backgroundColor: '#333333', color: '#ffffff', borderColor: '#555' },
-        menuLinks: '#ffffff',
-        boton: { textContent: 'Modo Claro', backgroundColor: '#333', color: '#fff', borderColor: '#555' },
-        tarjetas: { backgroundColor: '#2d2d2d', borderColor: '#555', color: '#ffffff' }
-    }
-};
+// ids centralizadas para evitar repeticion
+const BOTON_ID = 'btn-cambiar-color';
 
-// Funcion para aplicar tema
-function aplicarTema(isDark) {
-    const tema = isDark ? colores.oscuro : colores.claro;
+const CLASE_MODO_OSCURO = 'modo-oscuro';
 
-    // Body
-    Object.assign(document.body.style, tema.body);
+const STORAGE_KEY = 'colorPagina';
 
-    // Header
-    const header = document.querySelector('.header-principal');
-    if (header) Object.assign(header.style, tema.header);
-
-    // Buscador
-    const buscador = document.querySelector('.contenedor-buscador input');
-    if (buscador) Object.assign(buscador.style, tema.buscador);
-
-    // Links del menu
-    const menuLinks = document.querySelectorAll('.menu a');
-    menuLinks.forEach(link => link.style.color = tema.menuLinks);
-
-    // Boton
-    const boton = document.getElementById('btn-cambiar-color');
-    if (boton) {
-        boton.textContent = tema.boton.textContent;
-        Object.assign(boton.style, { backgroundColor: tema.boton.backgroundColor, color: tema.boton.color, borderColor: tema.boton.borderColor });
-    }
-
-    cambiarEstiloTarjetas(isDark);
+// funcion para actualizar el boton segun tema activo (oscuro / claro)
+function actualizarTextoBoton(esModoOscuro) {
+    const boton = document.getElementById(BOTON_ID);
+    if (!boton) return;
+    boton.textContent = esModoOscuro ? 'Modo Claro' : 'Modo Oscuro';
 }
 
-// Funcion para cambiar estilo
-function cambiarEstiloTarjetas(isDark) {
-    const tema = isDark ? colores.oscuro.tarjetas : colores.claro.tarjetas;
-    const tarjetas = document.querySelectorAll('.noticia-card');
-    tarjetas.forEach(card => Object.assign(card.style, tema));
+// aplica (o remueve) clase global que controla tema desde css
+function aplicarModoOscuro(esModoOscuro) {
+    document.body.classList.toggle(CLASE_MODO_OSCURO, esModoOscuro);
+    actualizarTextoBoton(esModoOscuro);
 }
 
-// Crear boton y manejar eventos
+// lee la preferencia desde localstorage que carga la funcion siguiente
+function leerPreferenciaTema() {
+    return localStorage.getItem(STORAGE_KEY) === 'oscuro';
+}
+
+// guarda preferencia en localstorage
+function guardarPreferenciaTema(esModoOscuro) {
+    localStorage.setItem(STORAGE_KEY, esModoOscuro ? 'oscuro' : 'claro');
+}
+
+// boton de cambio de tema y configurar eventos
 function crearBotonCambiarColor() {
     const botonColor = document.createElement('button');
-    botonColor.id = 'btn-cambiar-color';
-    botonColor.textContent = 'Modo Oscuro';
+    botonColor.id = BOTON_ID;
+    botonColor.type = 'button';
+    botonColor.classList.add('tema-boton');
 
-    // Estilos iniciales
-    Object.assign(botonColor.style, {
-        padding: '8px 16px',
-        marginLeft: '15px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        backgroundColor: '#f0f0f0',
-        color: '#000'
-    });
+    const menu = document.querySelector('.menu');   // inserta boton al menu princ
+    if (menu) {
+        menu.appendChild(botonColor);
+    }
 
-    const menu = document.querySelector('.menu');
-    if (menu) menu.appendChild(botonColor);
+    const modoOscuroInicial = leerPreferenciaTema(); // la funcion para la pref del tema
+    aplicarModoOscuro(modoOscuroInicial);
+    guardarPreferenciaTema(modoOscuroInicial);
 
-    let esModoOscuro = false;
-
-    // Evento click
+    // alternar tema al clickear y guardar nuevo
     botonColor.addEventListener('click', () => {
-        esModoOscuro = !esModoOscuro;
-        aplicarTema(esModoOscuro);
-        localStorage.setItem('colorPagina', esModoOscuro ? 'oscuro' : 'claro');
+        const estaOscuro = document.body.classList.toggle(CLASE_MODO_OSCURO);
+        actualizarTextoBoton(estaOscuro);
+        guardarPreferenciaTema(estaOscuro);
     });
-
-    // Recuperar preferencia
-    const colorGuardado = localStorage.getItem('colorPagina');
-    if (colorGuardado === 'oscuro') {
-        esModoOscuro = true;
-        setTimeout(() => aplicarTema(true), 100); // Delay para DOM
-    }
-
-    // Observer para noticias new
-    const contenedor = document.getElementById('contenedor-noticias');
-    if (contenedor) {
-        const observer = new MutationObserver(() => {
-            if (localStorage.getItem('colorPagina') === 'oscuro') {
-                cambiarEstiloTarjetas(true);
-            }
-        });
-        observer.observe(contenedor, { childList: true });
-    }
-
-    window.modoOscuroActivo = esModoOscuro;
 }
 
+// carga
 window.addEventListener('load', crearBotonCambiarColor);
