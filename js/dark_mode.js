@@ -1,161 +1,56 @@
-// boton modo oscuro
-function crearBotonCambiarColor()  {
-    // Crear el boton
+// ids centralizadas para evitar repeticion
+const BOTON_ID = 'btn-cambiar-color';
+
+const CLASE_MODO_OSCURO = 'modo-oscuro';
+
+const STORAGE_KEY = 'colorPagina';
+
+// funcion para actualizar el boton segun tema activo (oscuro / claro)
+function actualizarTextoBoton(esModoOscuro) {
+    const boton = document.getElementById(BOTON_ID);
+    if (!boton) return;
+    boton.textContent = esModoOscuro ? 'Modo Claro' : 'Modo Oscuro';
+}
+
+// aplica (o remueve) clase global que controla tema desde css
+function aplicarModoOscuro(esModoOscuro) {
+    document.body.classList.toggle(CLASE_MODO_OSCURO, esModoOscuro);
+    actualizarTextoBoton(esModoOscuro);
+}
+
+// lee la preferencia desde localstorage que carga la funcion siguiente
+function leerPreferenciaTema() {
+    return localStorage.getItem(STORAGE_KEY) === 'oscuro';
+}
+
+// guarda preferencia en localstorage
+function guardarPreferenciaTema(esModoOscuro) {
+    localStorage.setItem(STORAGE_KEY, esModoOscuro ? 'oscuro' : 'claro');
+}
+
+// boton de cambio de tema y configurar eventos
+function crearBotonCambiarColor() {
     const botonColor = document.createElement('button');
-    botonColor.id = 'btn-cambiar-color';
-    botonColor.textContent = 'Modo Oscuro';
-    
-    // Estilos para integrar en el header
-    botonColor.style.padding = '8px 16px';
-    botonColor.style.marginLeft = '15px';
-    botonColor.style.cursor = 'pointer';
-    botonColor.style.fontSize = '14px';
-    botonColor.style.borderRadius = '4px';
-    botonColor.style.border = '1px solid  #ccc';
-    botonColor.style.backgroundColor = '#f0f0f0';
-    botonColor.style.color = '#000';
-    
-    // Agregar al menu del header
-    const menu = document.querySelector('.menu');
-    menu.appendChild(botonColor);
-    
-    let esModoOscuro = false;
-    
-    // Evento click para cambiar color
-    botonColor.addEventListener('click', function()  {
-        esModoOscuro = !esModoOscuro;
-        
-        if (esModoOscuro)  {
-                    // Modo oscuro
-                    document.body.style.backgroundColor = '#1a1a1a';
-                    document.body.style.color = '#ffffff';
-                    
-                    // Header con fondo negro
-                    const header = document.querySelector('.header-principal');
-                    header.style.backgroundColor = '#000000';
-                    header.style.color = '#ffffff';
-                    header.style.borderColor = '#555';
-                    
-                    // Buscador
-                    const buscador = document.querySelector('.contenedor-buscador input');
-                    buscador.style.backgroundColor = '#333333';
-                    buscador.style.color = '#ffffff';
-                    buscador.style.borderColor = '#555';
-                    
-                    // Links del menú
-                    const menuLinks = document.querySelectorAll('.menu a');
-                    menuLinks.forEach(link => {
-                        link.style.color = '#ffffff';
-                    });
-                    
-                    botonColor.textContent = 'Modo Claro';
-                    botonColor.style.backgroundColor = '#333';
-                    botonColor.style.color = '#fff';
-                    botonColor.style.borderColor = '#555';
+    botonColor.id = BOTON_ID;
+    botonColor.type = 'button';
+    botonColor.classList.add('tema-boton');
 
-                    // Cambiar color de las tarjetas de noticias
-                    cambiarEstiloTarjetas(true);
-                } else  {
-                    // Modo claro
-                    document.body.style.backgroundColor = '#ffffff';
-                    document.body.style.color = '#000000';
-                    
-                    // Header con fondo gris claro
-                    const header = document.querySelector('.header-principal');
-                    header.style.backgroundColor = '#f4f4f4';
-                    header.style.color = '#000000';
-                    header.style.borderColor = '#000000';
-                    
-                    // Buscador
-                    const buscador = document.querySelector('.contenedor-buscador input');
-                    buscador.style.backgroundColor = '#ffffff';
-                    buscador.style.color = '#000000';
-                    buscador.style.borderColor = '#000000';
-                    
-                    // Links del menú
-                    const menuLinks = document.querySelectorAll('.menu a');
-                    menuLinks.forEach(link => {
-                        link.style.color = '#000000';
-                    });
-                    
-                    botonColor.textContent = 'Modo Oscuro';
-                    botonColor.style.backgroundColor = '#f0f0f0';
-                    botonColor.style.color = '#000';
-                    botonColor.style.borderColor = '#ccc';
-        
-                    // Cambiar color de las tarjetas de noticias
-                    cambiarEstiloTarjetas(false);
-                }
-
-        // Guardar preferencia en localStorage
-        localStorage.setItem('colorPagina', esModoOscuro ?'oscuro' :'claro');
-    });
-
-    // Recuperar color guardado
-            const colorGuardado = localStorage.getItem('colorPagina');
-            if (colorGuardado === 'oscuro')  {
-                esModoOscuro = true;
-                document.body.style.backgroundColor = '#1a1a1a';
-                document.body.style.color = '#ffffff';
-                
-                // Header con fondo negro
-                const header = document.querySelector('.header-principal');
-                header.style.backgroundColor = '#000000';
-                header.style.color = '#ffffff';
-                header.style.borderColor = '#555';
-                
-                // Buscador
-                const buscador = document.querySelector('.contenedor-buscador input');
-                buscador.style.backgroundColor = '#333333';
-                buscador.style.color = '#ffffff';
-                buscador.style.borderColor = '#555';
-                
-                // Links del menu
-                const menuLinks = document.querySelectorAll('.menu a');
-                menuLinks.forEach(link => {
-                    link.style.color = '#ffffff';
-                });
-                
-                botonColor.textContent = 'Modo Claro';
-                botonColor.style.backgroundColor = '#333';
-                botonColor.style.color = '#fff';
-                botonColor.style.borderColor = '#555';
-                // Pequeño delay para asegurar que las tarjetas ya esten en el DOM
-                setTimeout(function() {
-                    cambiarEstiloTarjetas(true);
-                }, 100);
-            }
-
-    // Guardar estado en variable global para acceder desde js
-    window.modoOscuroActivo = esModoOscuro;
-
-    // Observador para detectar cuando se agreguen tarjetas al DOM
-        const observador = new MutationObserver(function()  {
-            const colorGuardado = localStorage.getItem('colorPagina');
-            if (colorGuardado === 'oscuro')  {
-                cambiarEstiloTarjetas(true);
-            }
-        });
-
-        observador.observe(document.getElementById('contenedor-noticias'), { childList: true });
+    const menu = document.querySelector('.menu');   // inserta boton al menu princ
+    if (menu) {
+        menu.appendChild(botonColor);
     }
 
-// Funcion para cambiar el estilo de las tarjetas de noticias
-function cambiarEstiloTarjetas(esOscuro)  {
-    const tarjetas = document.querySelectorAll('.noticia-card');
-    tarjetas.forEach(card => {
-        if (esOscuro)  {
-            card.style.backgroundColor = '#2d2d2d';
-            card.style.borderColor = '#555';
-            card.style.color = '#ffffff';
-        } else  {
-            card.style.backgroundColor = '#ffffff';
-            card.style.borderColor = '#000000';
-            card.style.color = '#000000';
-        }
+    const modoOscuroInicial = leerPreferenciaTema(); // la funcion para la pref del tema
+    aplicarModoOscuro(modoOscuroInicial);
+    guardarPreferenciaTema(modoOscuroInicial);
+
+    // alternar tema al clickear y guardar nuevo
+    botonColor.addEventListener('click', () => {
+        const estaOscuro = document.body.classList.toggle(CLASE_MODO_OSCURO);
+        actualizarTextoBoton(estaOscuro);
+        guardarPreferenciaTema(estaOscuro);
     });
 }
 
-window.addEventListener('load', function()  {
-    crearBotonCambiarColor();
-});
+// carga
+window.addEventListener('load', crearBotonCambiarColor);
