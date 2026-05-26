@@ -1,4 +1,3 @@
-/* Contenedor principal (main + aside) */
 #contenedor-principal {
     display: flex;
     gap: 2rem;
