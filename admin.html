@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrador</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <main class="contenedor">
+
+    <section id="login" class="tarjeta">
+      <h1>Login administrador</h1>
+      <p>Ingresá con tu usuario y contraseña.</p>
+
+      <form id="formulario-login">
+        <input type="text" id="usuario" placeholder="Usuario">
+        <input type="password" id="clave" placeholder="Contraseña">
+        <button type="submit">Ingresar</button>
+      </form>
+
+      <p id="mensaje-error"></p>
+    </section>
+
+    <section id="panel" class="tarjeta oculto">
+      <h1>Panel de administrador</h1>
+      <p>Desde acá se puede modificar una noticia.</p>
+
+      <input type="text" id="nuevo-titulo" placeholder="Nuevo título de la noticia">
+      <textarea id="nuevo-texto" placeholder="Nuevo texto de la noticia"></textarea>
+
+      <button id="guardar">Guardar cambios</button>
+
+      <div class="vista-previa">
+        <h2>Vista previa</h2>
+        <h3 id="titulo-noticia">Título de la noticia</h3>
+        <p id="texto-noticia">Texto de la noticia</p>
+      </div>
+
+      <button id="salir">Cerrar sesión</button>
+    </section>
+
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
