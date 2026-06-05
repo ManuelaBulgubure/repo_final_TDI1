@@ -63,6 +63,19 @@ const noticiasHardcodeadas = [
     }
 ];
 
+function escapeHtml(str) {
+  if (!str) return "";
+  return str.replace(/[&"'<>]/g, function (m) {
+    return ({
+      '&': '&amp;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '<': '&lt;',
+      '>': '&gt;'
+    })[m];
+  });
+}
+
 function cargarNoticias() {
   const raw = localStorage.getItem(NEWS_KEY);
   return raw ? JSON.parse(raw) : [];
