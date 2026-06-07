@@ -98,23 +98,6 @@ button:hover {
   display: none;
 }
 
-.vista-previa {
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #1c1c21;          
-  border-radius: 12px;
-  border-left: 4px solid #3b82f6;
-}
-
-.vista-previa h2 {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #3b82f6;
-  margin-top: 0;
-  margin-bottom: 12px;
-}
-
 #salir {
   background: #27272a;
   border: 1px solid rgba(255, 255, 255, 0.05);
