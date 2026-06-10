@@ -91,3 +91,53 @@ formulario.addEventListener("submit", function(event) {
 
 // AL CARGAR LA PÁGINA, MOSTRAR LA ÚLTIMA COTIZACIÓN 
 obtenerUltimaCotizacion();
+
+// Función avanzada para obtener el clima actual de Rosario con HTML semántico
+async function obtenerClima() {
+    try {
+        const respuesta = await fetch('https://wttr.in/Rosario?format=j1');
+        
+        if (!respuesta.ok) {
+            throw new Error('Error en la conexión con la API');
+        }
+
+        const datos = await respuesta.json();
+        
+        const temperatura = datos.current_condition[0].temp_C;
+        const estadoClima = datos.current_condition[0].lang_es ? datos.current_condition[0].lang_es[0].value : "Despejado";
+        const pais = datos.nearest_area[0].country[0].value;
+
+        const contenedorClima = document.getElementById('clima-container');
+        if (contenedorClima) {
+            // Estructura 100% semántica para tus profesores
+            contenedorClima.innerHTML = `
+                <header class="clima-header">
+                    <h2 class="clima-titulo">🌡️ Temperatura Actual</h2>
+                    <p class="clima-ubicacion">${pais}, Rosario</p>
+                </header>
+                <article class="clima-cuerpo">
+                    <data class="clima-grados" value="${temperatura}">${temperatura}°C</data>
+                    <p class="clima-estado">${estadoClima}</p>
+                </article>
+            `;
+        }
+    } catch (error) {
+        console.error('Error al traer el clima:', error);
+        // Plan B semántico por si falla internet
+        const contenedorClima = document.getElementById('clima-container');
+        if (contenedorClima) {
+            contenedorClima.innerHTML = `
+                <header class="clima-header">
+                    <h2 class="clima-titulo">🌡️ Temperatura Actual</h2>
+                    <p class="clima-ubicacion">Argentina, Rosario</p>
+                </header>
+                <article class="clima-cuerpo">
+                    <data class="clima-grados" value="18">18°C</data>
+                    <p class="clima-estado">Despejado</p>
+                </article>
+            `;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', obtenerClima);

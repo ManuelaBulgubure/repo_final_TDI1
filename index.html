@@ -6,7 +6,7 @@
     <title>Portal de Noticias - DigitalData</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dark_mode.css">
-    <link rel="stylesheet" href="css/api_dolar.css">
+    <link rel="stylesheet" href="css/api_externas.css">
  </head>
 <body>
     <header class="header-principal">
@@ -23,7 +23,8 @@
     <section id="contenedor-principal"> 
         <main id="contenedor-noticias"> </main>
         
-        <aside id="aside" class="aside-dolar">
+        <aside id="aside">
+            <section class="aside-card aside-dolar">
                 <h3>Cotización del Dólar💵</h3>
 
                 <form id="form-dolar">
@@ -35,6 +36,14 @@
                 <section id="contenedor-cotizaciones">
                     <p>Cargando última cotización⏳...</p>
                 </section>
+            </section>
+
+            <section class="aside-card aside-clima">
+                <h3>Clima de Rosario ☀️</h3>
+                <section id="clima-container" class="clima-box">
+                    <p class="cargando">Consultando satélite meteorológico...</p>
+                </section>
+            </section>
         </aside>
     
     </section>
@@ -44,6 +53,6 @@
 
     <script src="js/main.js"></script>
     <script src="js/dark_mode.js"></script>
-    <script src="js/api_dolar.js"></script> 
+    <script src="js/api_externas.js"></script> 
 </body>
 </html>
