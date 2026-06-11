@@ -19,6 +19,9 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
 }
 
 .aside-card {
@@ -37,8 +40,7 @@
 }
 
 .aside-dolar {
-    position: sticky;
-    top: 1rem;
+    position: relative;
 }
 
 .aside-dolar form {
@@ -179,14 +181,17 @@ body.modo-oscuro .fecha-consulta {
         padding: 1rem;
     }
     
-    #contenedor-noticias {
-        grid-template-columns: repeat(2, 1fr);
+    #aside {
+        position: static;
+        width: 100%;
+    }
+
+    .aside-card {
+        width: 100%;
     }
     
-    .aside-dolar {
-        order: -1;
-        width: 100%;
-        position: static;
+    #contenedor-noticias {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
