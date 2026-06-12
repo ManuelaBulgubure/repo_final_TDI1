@@ -44,6 +44,27 @@ function mostrarCotizacion(datos, titulo, fechaConsulta = null) {
         <p class="fecha-consulta"> Consulta: ${fechaMostrada || "última disponible"}</p>
     `;
 }
+
+function mostrarClima(datos, ciudadAConsultar) {
+    const temperatura = datos.current_condition[0].temp_C;
+    const estadoClima = datos.current_condition[0].lang_es ? datos.current_condition[0].lang_es[0].value : "Despejado";
+    const pais = datos.nearest_area?.[0]?.country?.[0]?.value || "Argentina";
+    const area = datos.nearest_area?.[0]?.areaName?.[0]?.value || ciudadAConsultar;
+
+    const contenedorClima = document.getElementById('clima-container');
+    if (contenedorClima) {
+        contenedorClima.innerHTML = `
+            <h2>Clima de ${area}, ${pais}</h2>
+            <p> <strong>Temperatura actual:</strong>
+            <br>
+            ${temperatura}°C </p>
+            <p> <strong>Condición:</strong>
+            <br>
+            ${estadoClima}</p>
+            <p class="fecha-consulta"> Consulta: ${new Date().toLocaleString('es-AR')}</p>
+        `;
+    }
+}
 // FUNCIÓN PARA OBTENER COTIZACIÓN POR FECHA (versión histórica)
 function obtenerCotizacionPorFecha(fecha) {
     resultado.innerHTML = "<p> Cargando cotización⏳...</p>";
@@ -111,37 +132,16 @@ async function obtenerClima(ciudad = 'Rosario') {
             throw new Error('No se obtuvo información de clima para esa ciudad');
         }
 
-        const temperatura = datos.current_condition[0].temp_C;
-        const estadoClima = datos.current_condition[0].lang_es ? datos.current_condition[0].lang_es[0].value : "Despejado";
-        const pais = datos.nearest_area?.[0]?.country?.[0]?.value || "Argentina";
-        const area = datos.nearest_area?.[0]?.areaName?.[0]?.value || ciudadAConsultar;
-
-        const contenedorClima = document.getElementById('clima-container');
-        if (contenedorClima) {
-            // Estructura 100% semántica para tus profesores
-            contenedorClima.innerHTML = `
-                <header class="clima-header">
-                    <h2 class="clima-titulo">🌡️ Temperatura Actual</h2>
-                    <p class="clima-ubicacion">${pais}, ${area}</p>
-                </header>
-                <article class="clima-cuerpo">
-                    <data class="clima-grados" value="${temperatura}">${temperatura}°C</data>
-                    <p class="clima-estado">${estadoClima}</p>
-                </article>
-            `;
-        }
+        mostrarClima(datos, ciudadAConsultar);
     } catch (error) {
         console.error('Error al traer el clima:', error);
         const contenedorClima = document.getElementById('clima-container');
         if (contenedorClima) {
             contenedorClima.innerHTML = `
-                <header class="clima-header">
-                    <h2 class="clima-titulo">🌡️ Clima no disponible</h2>
-                    <p class="clima-ubicacion">${ciudadAConsultar}</p>
-                </header>
-                <article class="clima-cuerpo">
-                    <p class="clima-error">No se encontró la ciudad. Verificá la ortografía o probá otra ciudad.</p>
-                </article>
+                <h2>Clima no disponible</h2>
+                <p><strong>Ciudad:</strong><br>${ciudadAConsultar}</p>
+                <p>No se encontró la ciudad. Verificá la ortografía o probá otra ciudad.</p>
+                <p class="fecha-consulta">Consulta: ${new Date().toLocaleString('es-AR')}</p>
             `;
         }
     }
