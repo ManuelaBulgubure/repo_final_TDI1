@@ -2,6 +2,8 @@
 const formulario = document.getElementById("form-dolar");
 const inputFecha = document.getElementById("fecha-dolar");
 const resultado = document.getElementById("contenedor-cotizaciones");
+const formClima = document.getElementById("form-clima");
+const inputCiudadClima = document.getElementById("ciudad-clima");
 const today = new Date();
 inputFecha.max = today.toISOString().split('T')[0];
 
@@ -92,10 +94,12 @@ formulario.addEventListener("submit", function(event) {
 // AL CARGAR LA PÁGINA, MOSTRAR LA ÚLTIMA COTIZACIÓN 
 obtenerUltimaCotizacion();
 
-// Función avanzada para obtener el clima actual de Rosario con HTML semántico
-async function obtenerClima() {
+// Función avanzada para obtener el clima actual de cualquier ciudad con HTML semántico
+async function obtenerClima(ciudad = 'Rosario') {
+    const ciudadAConsultar = ciudad.trim() || 'Rosario';
+
     try {
-        const respuesta = await fetch('https://wttr.in/Rosario?format=j1');
+        const respuesta = await fetch(`https://wttr.in/${encodeURIComponent(ciudadAConsultar)}?format=j1`);
         
         if (!respuesta.ok) {
             throw new Error('Error en la conexión con la API');
@@ -103,9 +107,14 @@ async function obtenerClima() {
 
         const datos = await respuesta.json();
         
+        if (!datos || !datos.current_condition?.length) {
+            throw new Error('No se obtuvo información de clima para esa ciudad');
+        }
+
         const temperatura = datos.current_condition[0].temp_C;
         const estadoClima = datos.current_condition[0].lang_es ? datos.current_condition[0].lang_es[0].value : "Despejado";
-        const pais = datos.nearest_area[0].country[0].value;
+        const pais = datos.nearest_area?.[0]?.country?.[0]?.value || "Argentina";
+        const area = datos.nearest_area?.[0]?.areaName?.[0]?.value || ciudadAConsultar;
 
         const contenedorClima = document.getElementById('clima-container');
         if (contenedorClima) {
@@ -113,7 +122,7 @@ async function obtenerClima() {
             contenedorClima.innerHTML = `
                 <header class="clima-header">
                     <h2 class="clima-titulo">🌡️ Temperatura Actual</h2>
-                    <p class="clima-ubicacion">${pais}, Rosario</p>
+                    <p class="clima-ubicacion">${pais}, ${area}</p>
                 </header>
                 <article class="clima-cuerpo">
                     <data class="clima-grados" value="${temperatura}">${temperatura}°C</data>
@@ -123,21 +132,27 @@ async function obtenerClima() {
         }
     } catch (error) {
         console.error('Error al traer el clima:', error);
-        // Plan B semántico por si falla internet
         const contenedorClima = document.getElementById('clima-container');
         if (contenedorClima) {
             contenedorClima.innerHTML = `
                 <header class="clima-header">
-                    <h2 class="clima-titulo">🌡️ Temperatura Actual</h2>
-                    <p class="clima-ubicacion">Argentina, Rosario</p>
+                    <h2 class="clima-titulo">🌡️ Clima no disponible</h2>
+                    <p class="clima-ubicacion">${ciudadAConsultar}</p>
                 </header>
                 <article class="clima-cuerpo">
-                    <data class="clima-grados" value="18">18°C</data>
-                    <p class="clima-estado">Despejado</p>
+                    <p class="clima-error">No se encontró la ciudad. Verificá la ortografía o probá otra ciudad.</p>
                 </article>
             `;
         }
     }
 }
 
-document.addEventListener('DOMContentLoaded', obtenerClima);
+if (formClima) {
+    formClima.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const ciudadSeleccionada = inputCiudadClima.value.trim() || 'Rosario';
+        obtenerClima(ciudadSeleccionada);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => obtenerClima(inputCiudadClima?.value || 'Rosario'));
