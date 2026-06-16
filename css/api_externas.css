@@ -50,17 +50,6 @@
     margin-bottom: 20px;
 }
 
-.aside-clima {
-    min-height: 220px;
-}
-
-.clima-box {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 1rem;
-    border: 1px solid #d1d5db;
-}
-
 .aside-card label {
     font-weight: bold;
 }
@@ -112,11 +101,6 @@ body.modo-oscuro .aside-card button {
     background-color: #333;
     color: #fff;
     border-color: #555;
-}
-
-body.modo-oscuro .clima-box {
-    background-color: #252525;
-    border-color: #444;
 }
 
 body.modo-oscuro .fecha-consulta {
